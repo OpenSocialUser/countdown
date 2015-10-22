@@ -39,6 +39,8 @@ function drawCountdown(digits, targetTime) {
     var htmlHeader = "";
     var htmlFooter = "";
 
+    var state = wave.getState();
+
     html += "<div id='countdown'></div>";
 
     if (isOwner) {
