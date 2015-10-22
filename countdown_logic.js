@@ -172,7 +172,7 @@ function renderCountdown() {
     checkIfOwner();
 
     if (targetTime != null && digits != null) {
-    	drawCountdown(clockType, digits, targetTime);
+    	drawCountdown(digits, targetTime);
     } else {
         if (isOwner) {
     	   renderEditPage();
