@@ -1,0 +1,18 @@
+#countdown_gadget {
+	width: 95%;
+	min-height: 150px;
+}
+
+#body {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#header {
+	height: 30px;
+}
+
+#footer {
+	float: right;
+	margin-right: 10px;
+}

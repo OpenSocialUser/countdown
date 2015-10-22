@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<Module>
+    <ModulePrefs title="Countdown"  height="300">
+    	<Require feature="wave"/>
+    	<Require feature="osapi"/>
+    	<Require feature="dynamic-height"/>
+    </ModulePrefs>
+    <Content type="html" href="https://rawgit.com/OpenSocialUser/countdown/master/countdown.html">
+    </Content>
+</Module>
