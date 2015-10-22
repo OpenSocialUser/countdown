@@ -50,6 +50,18 @@ function drawCountdown(clockType, digits, targetTime) {
 
     html += "<div id='countdown'></div>";
 
+    if (isOwner) {
+        htmlFooter += "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
+    } else {
+        setTimeout(function(){
+            if (isOwner) {
+                var htmlFooterText = "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
+                $("#footer").append(htmlFooterText);
+                gadgets.window.adjustHeight();
+            }
+        }, 1000);
+    }
+
     document.getElementById('body').innerHTML = html;
     document.getElementById('footer').innerHTML = htmlFooter;
     document.getElementById('header').innerHTML = htmlHeader;
