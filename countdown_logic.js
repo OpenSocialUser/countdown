@@ -54,9 +54,9 @@ function drawCountdown(clockType, digits, targetTime) {
         htmlFooter += "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
     } else {
         setTimeout(function(){
-            if (isOwner) {
+            if (isOwner && htmlFooter != "") {
                 var htmlFooterText = "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
-                $("#footer").append(htmlFooterText);
+                $("#footer").html(htmlFooterText);
                 gadgets.window.adjustHeight();
             }
         }, 1000);
@@ -99,6 +99,7 @@ function drawCountdown(clockType, digits, targetTime) {
 
         });
     } else if (clockType == "digital") {
+        $("#countdown").TimeCircles().destroy();
         $("#countdown").countdown(targetTime);
     }
 }
@@ -202,7 +203,6 @@ function renderEditPage() {
         inline:true,
         minDate: '-1970/01/01',
         onChangeDateTime:function(dp, $input){
-            alert($input.val());
             selectedDate = $input.val();
         }
     });
