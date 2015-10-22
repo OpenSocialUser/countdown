@@ -100,7 +100,7 @@ function drawCountdown(clockType, digits, targetTime) {
         });
     } else if (clockType == "digital") {
         $("#countdown").TimeCircles().destroy();
-        $("#countdown").countdown(targetTime);
+        $("#countdown").countdown(targetTime + ":00");
     }
 }
 
