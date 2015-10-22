@@ -12,16 +12,8 @@ function toObject(str) {
 function updateCountdown() {
 	var state = wave.getState();
 
-	var clockType = "";
     var digits = "";
     var targetTime = "";
-
-    var clockTypeRadio = $("input[type='radio'][name='clock_type']:checked");
-    if (clockTypeRadio.length > 0) {
-        clockType = clockTypeRadio.val();
-    } else {
-        clockType = "circle";
-    }
 
     var digitsRadio = $("input[type='radio'][name='digits']:checked");
     if (digitsRadio.length > 0) {
@@ -33,17 +25,16 @@ function updateCountdown() {
     targetTime = selectedDate;
 
     if (targetTime != null && targetTime != "") {
-        state.submitDelta({'clock_type' : clockType});
         state.submitDelta({'digits' : digits});
         state.submitDelta({'target_time' : targetTime});
 
-        drawCountdown(clockType, digits, targetTime);
+        drawCountdown(digits, targetTime);
     } else {
         renderEditPage();
     }
 }
 
-function drawCountdown(clockType, digits, targetTime) {    
+function drawCountdown(digits, targetTime) {    
     var html = "";
     var htmlHeader = "";
     var htmlFooter = "";
@@ -52,68 +43,43 @@ function drawCountdown(clockType, digits, targetTime) {
 
     if (isOwner) {
         htmlFooter += "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
-    } else {
-        setTimeout(function(){
-            if (isOwner && htmlFooter != "") {
-                var htmlFooterText = "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
-                $("#footer").html(htmlFooterText);
-                gadgets.window.adjustHeight();
-            }
-        }, 1000);
     }
 
     document.getElementById('body').innerHTML = html;
     document.getElementById('footer').innerHTML = htmlFooter;
     document.getElementById('header').innerHTML = htmlHeader;
 
-    if (clockType == "circle") {
-        $("#countdown").data("date", targetTime);
-        $("#countdown").TimeCircles({
-            "count_past_zero": false,
-            "animation": "smooth",
-            "bg_width": 0.2,
-            "fg_width": 0.03,
-            "circle_bg_color": "#90989F",
-            "time": {
-                "Days": {
-                    "text": "Days",
-                    "color": "#40484F",
-                    "show": true
-                },
-                "Hours": {
-                    "text": "Hours",
-                    "color": "#40484F",
-                    "show": true
-                },
-                "Minutes": {
-                    "text": "Minutes",
-                    "color": "#40484F",
-                    "show": true
-                },
-                "Seconds": {
-                    "text": "Seconds",
-                    "color": "#40484F",
-                    "show": true
-                }
+    $("#countdown").data("date", targetTime);
+    $("#countdown").TimeCircles({
+        "count_past_zero": false,
+        "animation": "smooth",
+        "bg_width": 0.2,
+        "fg_width": 0.03,
+        "circle_bg_color": "#90989F",
+        "time": {
+            "Days": {
+                "text": "Days",
+                "color": "#40484F",
+                "show": true
+            },
+            "Hours": {
+                "text": "Hours",
+                "color": "#40484F",
+                "show": true
+            },
+            "Minutes": {
+                "text": "Minutes",
+                "color": "#40484F",
+                "show": true
+            },
+            "Seconds": {
+                "text": "Seconds",
+                "color": "#40484F",
+                "show": true
             }
+        }
 
-        });
-    } else if (clockType == "digital") {
-        $("#countdown").TimeCircles().destroy();
-        $("#countdown").countdown(targetTime + ":00");
-    }
-}
-
-function normalizeDate(date) {
-	var dateString = "";
-	dateString += (date.getMonth() + 1).toString() + '/';
-	dateString += date.getDate().toString() + '/';
-	dateString += date.getFullYear().toString();
-	dateString += "  ";
-	dateString += date.getHours().toString() + ":";
-	dateString += date.getMinutes().toString();
-
-	return dateString;
+    });
 }
 
 function checkIfOwner() {
@@ -136,26 +102,12 @@ function checkIfOwner() {
 function renderEditPage() {
 	var state = wave.getState();
 
-	var clockType = state.get('clock_type');
     var targetTime = state.get('target_time');
     var digits = state.get('digits');
 
 	var html = "";
 	var htmlHeader = "";
 	var htmlFooter = "";
-
-	html += "<p style='font-size: 14px;'>Choose clock type:</p>";
-	if (clockType != null && clockType == "digital") {
-        html += "<input type='radio' name='clock_type' value='circle'>Circle</input>";
-        html += "</br>";
-		html += "<input type='radio' name='clock_type' value='digital' checked='true'>Digital</input>";
-	} else {
-        html += "<input type='radio' name='clock_type' value='circle' checked='true'>Circle</input>";
-        html += "</br>";
-        html += "<input type='radio' name='clock_type' value='digital'>Digital</input>";
-    }
-
-    html += "</br>";
 
     html += "<p style='font-size: 14px;'>Choose digits to display:</p>";
 
@@ -180,6 +132,7 @@ function renderEditPage() {
         html += "<input id='target_date_picker' type='text'/>";
     }
 
+    html += "</br>";
     html += "</br>";
 
     html += "<button id='saveButton' onclick='updateCountdown()''>Save</button>";
@@ -213,13 +166,12 @@ function renderCountdown() {
         return;
     }
     var state = wave.getState();
-    var clockType = state.get('clock_type');
     var targetTime = state.get('target_time');
     var digits = state.get('digits');
 
     checkIfOwner();
 
-    if (clockType != null && clockType != "" && targetTime != null && digits != null) {
+    if (targetTime != null && digits != null) {
     	drawCountdown(clockType, digits, targetTime);
     } else {
         if (isOwner) {
