@@ -9,29 +9,86 @@ function toObject(str) {
     return gadgets.json.parse(str);
 }
 
-function updateCountdown(){
+function updateCountdown() {
 	var state = wave.getState();
 
-	var clockType = document.getElementById('link_to_rss').value;
-    var digits = document.getElementById('link_to_rss').value;
-    var targetTime = parseInt(document.getElementById('entries_to_display').value);
+	var clockType = "";
+    var digits = "";
+    var targetTime = "";
 
-	if (rssLink != null && rssLink != "") {
-        if (entries_to_display != null && entries_to_display >= 1 && entries_to_display <= 25) {
-            document.getElementById('entries_to_display').value = '';
-            state.submitDelta({'entries_to_display' : entries_to_display});
-        } else {
-            document.getElementById('entries_to_display').value = '';
-            state.submitDelta({'entries_to_display' : 3});
-        }
-		document.getElementById('link_to_rss').value = '';
-		state.submitDelta({'rss_link' : rssLink});
-		requestRSS(rssLink);
-	}
+    var clockTypeRadio = $("input[type='radio'][name='clock_type']:checked");
+    if (clockTypeRadio.length > 0) {
+        clockType = clockTypeRadio.val();
+    } else {
+        clockType = "circle";
+    }
+
+    var digitsRadio = $("input[type='radio'][name='digits']:checked");
+    if (digitsRadio.length > 0) {
+        digits = clockTypeRadio.val();
+    } else {
+        digits = "all";
+    }
+
+    targetTime = selectedDate;
+
+    if (targetTime != null && targetTime != "") {
+        state.submitDelta({'clock_type' : clockType});
+        state.submitDelta({'digits' : digits});
+        state.submitDelta({'target_time' : targetTime});
+
+        drawCountdown(clockType, digits, targetTime);
+    } else {
+        renderEditPage();
+    }
 }
 
-function drawCountdown(clockType, targetTime, digits) {    
+function drawCountdown(clockType, digits, targetTime) {    
+    var html = "";
+    var htmlHeader = "";
+    var htmlFooter = "";
 
+    html += "<div id='countdown'></div>";
+
+    document.getElementById('body').innerHTML = html;
+    document.getElementById('footer').innerHTML = htmlFooter;
+    document.getElementById('header').innerHTML = htmlHeader;
+
+    if (clockType == "circle") {
+        $("#countdown").data("date", targetTime);
+        $("#countdown").TimeCircles({
+            "count_past_zero": false,
+            "animation": "smooth",
+            "bg_width": 0.2,
+            "fg_width": 0.03,
+            "circle_bg_color": "#90989F",
+            "time": {
+                "Days": {
+                    "text": "Days",
+                    "color": "#40484F",
+                    "show": true
+                },
+                "Hours": {
+                    "text": "Hours",
+                    "color": "#40484F",
+                    "show": true
+                },
+                "Minutes": {
+                    "text": "Minutes",
+                    "color": "#40484F",
+                    "show": true
+                },
+                "Seconds": {
+                    "text": "Seconds",
+                    "color": "#40484F",
+                    "show": true
+                }
+            }
+
+        });
+    } else if (clockType == "digital") {
+        $("#countdown").countdown(targetTime);
+    }
 }
 
 function normalizeDate(date) {
@@ -123,6 +180,8 @@ function renderEditPage() {
     html += ".";
     html += "</p>";
 
+    htmlHeader += "<h3>Settings:</h3>";
+
     document.getElementById('body').innerHTML = html;
     document.getElementById('footer').innerHTML = htmlFooter;
     document.getElementById('header').innerHTML = htmlHeader;
@@ -149,7 +208,7 @@ function renderCountdown() {
     checkIfOwner();
 
     if (clockType != null && clockType != "" && targetTime != null && digits != null) {
-    	drawCountdown(clockType, targetTime, digits);
+    	drawCountdown(clockType, digits, targetTime);
     } else {
         if (isOwner) {
     	   renderEditPage();

@@ -9,10 +9,14 @@
 }
 
 #header {
-	height: 30px;
+
 }
 
 #footer {
 	float: right;
 	margin-right: 10px;
+}
+
+#countdown {
+	width: 100%;
 }
