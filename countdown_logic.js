@@ -17,7 +17,7 @@ function updateCountdown() {
 
     var digitsRadio = $("input[type='radio'][name='digits']:checked");
     if (digitsRadio.length > 0) {
-        digits = clockTypeRadio.val();
+        digits = digitsRadio.val();
     } else {
         digits = "all";
     }
