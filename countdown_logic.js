@@ -104,9 +104,14 @@ function drawCountdown(digits, targetTime) {
 
     });
 
-    if (!displayCircles) {
+    if (displayCircles != null && !displayCircles) {
         var canvas = $("#countdown").find("canvas");
         canvas.hide();
+
+        var timeCirclesDiv = $(".time_circles").first();
+        timeCirclesDiv.append("<div id='circle_placeholder'></div>");
+        timeCirclesDiv.css("width", canvas.width);
+        timeCirclesDiv.css("height", canvas.height);
     }
 }
 
