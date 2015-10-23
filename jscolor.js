@@ -1008,4 +1008,4 @@ var jscolor = {
 };
 
 
-jscolor.install();
+//jscolor.install();

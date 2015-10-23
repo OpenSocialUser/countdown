@@ -211,6 +211,8 @@ function renderEditPage() {
             selectedDate = $input.val();
         }
     });
+
+    jscolor.install();
 }
 
 function renderCountdown() {
