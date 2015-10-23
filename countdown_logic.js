@@ -168,9 +168,9 @@ function renderEditPage() {
     html += "<p style='font-size: 14px;'>Pick circle color:</p>";
 
     if (circlesColor != null && circlesColor != "") {
-        html += "<input class='color {hash:true}' value='" + circlesColor + "'/>";
+        html += "<input id='picker' class='color' value='" + circlesColor + "'/>";
     } else {
-        html += "<input class='color {hash:true}' value='#40484F'/>";
+        html += "<input id='picker' class='color' value='40484F'/>";
     }
 
     html += "</br>";
@@ -212,7 +212,8 @@ function renderEditPage() {
         }
     });
 
-    jscolor.install();
+    var colorPicker = new jscolor.color(document.getElementById('picker'), {});
+    colorPicker.fromString($("#color").val());
 }
 
 function renderCountdown() {
