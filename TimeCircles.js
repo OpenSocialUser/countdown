@@ -109,6 +109,7 @@
     
     function isCanvasSupported() {
         var elem = document.createElement('canvas');
+        elem.id = "circlesCanvas";
         return !!(elem.getContext && elem.getContext('2d'));
     }
 
