@@ -168,9 +168,9 @@ function renderEditPage() {
     html += "<p style='font-size: 14px;'>Pick circle color:</p>";
 
     if (circlesColor != null && circlesColor != "") {
-        html += "<input id='color_picker' value='" + circlesColor + "'/>";
+        html += "<input class='color {hash:true}' value='" + circlesColor + "'/>";
     } else {
-        html += "<input id='color_picker' value='#40484F'/>";
+        html += "<input class='color {hash:true}' value='#40484F'/>";
     }
 
     html += "</br>";
@@ -211,8 +211,6 @@ function renderEditPage() {
             selectedDate = $input.val();
         }
     });
-
-    $("#color_picker").colorPicker();
 }
 
 function renderCountdown() {
