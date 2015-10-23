@@ -109,9 +109,7 @@ function drawCountdown(digits, targetTime) {
         canvas.hide();
 
         var timeCirclesDiv = $(".time_circles").first();
-        timeCirclesDiv.append("<div id='circle_placeholder'></div>");
-        timeCirclesDiv.css("width", canvas.width);
-        timeCirclesDiv.css("height", canvas.height);
+        timeCirclesDiv.css("height", canvas.height.toString() + "px");
     }
 }
 
