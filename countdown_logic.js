@@ -14,6 +14,7 @@ function updateCountdown() {
 
     var digits = "";
     var targetTime = "";
+    var displayCircles = true;
 
     var digitsRadio = $("input[type='radio'][name='digits']:checked");
     if (digitsRadio.length > 0) {
@@ -24,9 +25,17 @@ function updateCountdown() {
 
     targetTime = selectedDate;
 
+    var circlesCheckbox = $("input[type='checkbox'][name='circles']:checked");
+    if (circlesCheckbox.length > 0) {
+        displayCircles = true;
+    } else {
+        displayCircles = false;
+    }
+
     if (targetTime != null && targetTime != "") {
         state.submitDelta({'digits' : digits});
         state.submitDelta({'target_time' : targetTime});
+        state.submitDelta({'display_circles' : displayCircles});
 
         drawCountdown(digits, targetTime);
     } else {
@@ -54,69 +63,50 @@ function drawCountdown(digits, targetTime) {
     $("#countdown").data("date", targetTime);
 
     var digits = state.get('digits');
+    var displayCircles = state.get('display_circles');
+
+    var showAllDigits = true;
 
     if (digits == "days") {
-        $("#countdown").TimeCircles({
-            "count_past_zero": false,
-            "animation": "smooth",
-            "bg_width": 0.2,
-            "fg_width": 0.03,
-            "circle_bg_color": "#90989F",
-            "time": {
-                "Days": {
-                    "text": "Days",
-                    "color": "#40484F",
-                    "show": true
-                },
-                "Hours": {
-                    "text": "Hours",
-                    "color": "#40484F",
-                    "show": false
-                },
-                "Minutes": {
-                    "text": "Minutes",
-                    "color": "#40484F",
-                    "show": false
-                },
-                "Seconds": {
-                    "text": "Seconds",
-                    "color": "#40484F",
-                    "show": false
-                }
-            }
-
-        });
+        showAllDigits = false;
     } else {
-        $("#countdown").TimeCircles({
-            "count_past_zero": false,
-            "animation": "smooth",
-            "bg_width": 0.2,
-            "fg_width": 0.03,
-            "circle_bg_color": "#90989F",
-            "time": {
-                "Days": {
-                    "text": "Days",
-                    "color": "#40484F",
-                    "show": true
-                },
-                "Hours": {
-                    "text": "Hours",
-                    "color": "#40484F",
-                    "show": true
-                },
-                "Minutes": {
-                    "text": "Minutes",
-                    "color": "#40484F",
-                    "show": true
-                },
-                "Seconds": {
-                    "text": "Seconds",
-                    "color": "#40484F",
-                    "show": true
-                }
-            }
+        showAllDigits = true;
+    }
 
-        });
+    $("#countdown").TimeCircles({
+        "count_past_zero": false,
+        "animation": "smooth",
+        "bg_width": 0.2,
+        "fg_width": 0.03,
+        "circle_bg_color": "#90989F",
+        "time": {
+            "Days": {
+                "text": "Days",
+                "color": "#40484F",
+                "show": true
+            },
+            "Hours": {
+                "text": "Hours",
+                "color": "#40484F",
+                "show": showAllDigits
+            },
+            "Minutes": {
+                "text": "Minutes",
+                "color": "#40484F",
+                "show": showAllDigits
+            },
+            "Seconds": {
+                "text": "Seconds",
+                "color": "#40484F",
+                "show": showAllDigits
+            }
+        }
+
+    });
+
+    if (!displayCircles) {
+        var canvas = $("#countdown").find("canvas");
+        canvas.hide();
     }
 }
 
@@ -142,6 +132,7 @@ function renderEditPage() {
 
     var targetTime = state.get('target_time');
     var digits = state.get('digits');
+    var displayCircles = state.get('display_circles');
 
 	var html = "";
 	var htmlHeader = "";
@@ -157,6 +148,16 @@ function renderEditPage() {
         html += "<input type='radio' name='digits' value='all' checked='true'>Days with hour/min/sec</input>";
         html += "</br>";
         html += "<input type='radio' name='digits' value='days'>Days only</input>";
+    }
+
+    html += "</br>";
+
+    html += "<p style='font-size: 14px;'>Countdown style:</p>";
+
+    if (displayCircles != null && displayCircles == false) {
+        html += "<input type='checkbox' name='circles' value='true'>Display circles</input>";
+    } else {
+        html += "<input type='checkbox' name='circles' value='true' checked='true'>Display circles</input>";
     }
 
     html += "</br>";
