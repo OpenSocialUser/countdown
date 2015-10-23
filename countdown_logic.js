@@ -105,11 +105,10 @@ function drawCountdown(digits, targetTime) {
     });
 
     if (displayCircles != null && !displayCircles) {
-        var canvas = $("#countdown").find("canvas");
+        var canvas = $("#countdown").find("canvas").first();
         canvas.hide();
 
         var timeCirclesDiv = $(".time_circles").first();
-        alert(timeCirclesDiv.css("height") + " - " + canvas.height.toString() + "px");
         timeCirclesDiv.css("height", canvas.height.toString() + "px");
     }
 }
