@@ -32,23 +32,24 @@ function updateCountdown() {
         displayCircles = false;
     }
 
+
+
     if (targetTime != null && targetTime != "") {
         state.submitDelta({'digits' : digits});
         state.submitDelta({'target_time' : targetTime});
         state.submitDelta({'display_circles' : displayCircles});
+        state.submitDelta({'circles_color' : circlesColor});
 
-        drawCountdown(digits, targetTime);
+        drawCountdown(digits, targetTime, displayCircles, circlesColor);
     } else {
         renderEditPage();
     }
 }
 
-function drawCountdown(digits, targetTime) {    
+function drawCountdown(digits, targetTime, displayCircles, drawCountdown) {    
     var html = "";
     var htmlHeader = "";
     var htmlFooter = "";
-
-    var state = wave.getState();
 
     html += "<div id='countdown'></div>";
 
@@ -62,12 +63,9 @@ function drawCountdown(digits, targetTime) {
 
     $("#countdown").data("date", targetTime);
 
-    var digits = state.get('digits');
-    var displayCircles = state.get('display_circles');
-
     var showAllDigits = true;
 
-    if (digits == "days") {
+    if (digits != null && digits == "days") {
         showAllDigits = false;
     } else {
         showAllDigits = true;
@@ -137,6 +135,7 @@ function renderEditPage() {
     var targetTime = state.get('target_time');
     var digits = state.get('digits');
     var displayCircles = state.get('display_circles');
+    var circlesColor = state.get('circles_color');
 
 	var html = "";
 	var htmlHeader = "";
@@ -162,6 +161,16 @@ function renderEditPage() {
         html += "<input type='checkbox' name='circles' value='true'>Display circles</input>";
     } else {
         html += "<input type='checkbox' name='circles' value='true' checked='true'>Display circles</input>";
+    }
+
+    html += "</br>";
+
+    html += "<p style='font-size: 14px;'>Pick circle color:</p>";
+
+    if (circlesColor != null && circlesColor != "") {
+        html += "<input id='color_picker' value='" + circlesColor + "'/>";
+    } else {
+        html += "<input id='color_picker' value='#40484F'/>";
     }
 
     html += "</br>";
@@ -202,6 +211,8 @@ function renderEditPage() {
             selectedDate = $input.val();
         }
     });
+
+    $("#color_picker").colorPicker();
 }
 
 function renderCountdown() {
@@ -209,13 +220,16 @@ function renderCountdown() {
         return;
     }
     var state = wave.getState();
+
     var targetTime = state.get('target_time');
     var digits = state.get('digits');
+    var circlesColor = state.get('circles_color');
+    var displayCircles = state.get('display_circles');
 
     checkIfOwner();
 
     if (targetTime != null && digits != null) {
-    	drawCountdown(digits, targetTime);
+    	drawCountdown(digits, targetTime, displayCircles, circlesColor);
     } else {
         if (isOwner) {
     	   renderEditPage();
