@@ -32,7 +32,10 @@ function updateCountdown() {
         displayCircles = false;
     }
 
-
+    circlesColor = $("#picker").val();
+    if (circlesColor == null || circlesColor == undefined || circlesColor == "") {
+        circlesColor == "40484F";
+    }
 
     if (targetTime != null && targetTime != "") {
         state.submitDelta({'digits' : digits});
@@ -46,7 +49,7 @@ function updateCountdown() {
     }
 }
 
-function drawCountdown(digits, targetTime, displayCircles, drawCountdown) {    
+function drawCountdown(digits, targetTime, displayCircles, circlesColor) {    
     var html = "";
     var htmlHeader = "";
     var htmlFooter = "";
@@ -80,22 +83,22 @@ function drawCountdown(digits, targetTime, displayCircles, drawCountdown) {
         "time": {
             "Days": {
                 "text": "Days",
-                "color": "#40484F",
+                "color": "#" + circlesColor,
                 "show": true
             },
             "Hours": {
                 "text": "Hours",
-                "color": "#40484F",
+                "color": "#" + circlesColor,
                 "show": showAllDigits
             },
             "Minutes": {
                 "text": "Minutes",
-                "color": "#40484F",
+                "color": "#" + circlesColor,
                 "show": showAllDigits
             },
             "Seconds": {
                 "text": "Seconds",
-                "color": "#40484F",
+                "color": "#" + circlesColor,
                 "show": showAllDigits
             }
         }
@@ -213,7 +216,7 @@ function renderEditPage() {
     });
 
     var colorPicker = new jscolor.color(document.getElementById('picker'), {});
-    colorPicker.fromString($("#color").val());
+    colorPicker.fromString($("#picker").val());
 }
 
 function renderCountdown() {
