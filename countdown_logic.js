@@ -16,6 +16,8 @@ function updateCountdown() {
     var targetTime = "";
     var displayCircles = true;
 
+    var readMoreLink = $("#read_more_link").val();
+
     var digitsRadio = $("input[type='radio'][name='digits']:checked");
     if (digitsRadio.length > 0) {
         digits = digitsRadio.val();
@@ -42,19 +44,26 @@ function updateCountdown() {
         state.submitDelta({'target_time' : targetTime});
         state.submitDelta({'display_circles' : displayCircles});
         state.submitDelta({'circles_color' : circlesColor});
+        state.submitDelta({'read_more_link' : readMoreLink});
 
-        drawCountdown(digits, targetTime, displayCircles, circlesColor);
+        drawCountdown(digits, targetTime, displayCircles, circlesColor, readMoreLink);
     } else {
         renderEditPage();
     }
 }
 
-function drawCountdown(digits, targetTime, displayCircles, circlesColor) {    
+function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMoreLink) {    
     var html = "";
     var htmlHeader = "";
     var htmlFooter = "";
 
     html += "<div id='countdown'></div>";
+
+    if (readMoreLink != null && readMoreLink != "") {
+        html += "<div id='read_more'>";
+        html += "<a target='_blank' href='" + readMoreLink + "'>Read More</a>"
+        html += "</div>";
+    }
 
     if (isOwner) {
         htmlFooter += "<button id='editButton' onclick='renderEditPage()''>Edit</button>";
@@ -139,6 +148,7 @@ function renderEditPage() {
     var digits = state.get('digits');
     var displayCircles = state.get('display_circles');
     var circlesColor = state.get('circles_color');
+    var readMoreLink = state.get('read_more_link');
 
 	var html = "";
 	var htmlHeader = "";
@@ -188,6 +198,17 @@ function renderEditPage() {
     }
 
     html += "</br>";
+
+    html += "<p style='font-size: 14px;'>Enter URL for 'Read More' link (if left empty the link won't be shown):</p>";
+
+    if (readMoreLink != null && readMoreLink != "") {
+        html += "<input id='read_more_link' type='text' value='" + readMoreLink + "'/>";
+        selectedDate = targetTime;
+    } else {
+        html += "<input id='read_more_link' type='text'/>";
+    }
+
+    html += "</br>";
     html += "</br>";
 
     html += "<button id='saveButton' onclick='updateCountdown()''>Save</button>";
@@ -229,11 +250,12 @@ function renderCountdown() {
     var digits = state.get('digits');
     var circlesColor = state.get('circles_color');
     var displayCircles = state.get('display_circles');
+    var readMoreLink = state.get('read_more_link');
 
     checkIfOwner();
 
     if (targetTime != null && digits != null) {
-    	drawCountdown(digits, targetTime, displayCircles, circlesColor);
+    	drawCountdown(digits, targetTime, displayCircles, circlesColor, readMoreLink);
     } else {
         if (isOwner) {
     	   renderEditPage();
