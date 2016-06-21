@@ -268,10 +268,10 @@ function renderCountdown() {
         }
     }
 
-    gadgets.window.adjustHeight();
+    /*gadgets.window.adjustHeight();
     setTimeout(function(){
         gadgets.window.adjustHeight();
-    }, 1500);
+    }, 1500);*/
 }
 
 function init() {
