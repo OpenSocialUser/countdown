@@ -61,7 +61,7 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
 
     if (readMoreLink != null && readMoreLink != "") {
         html += "<div id='read_more'>";
-        html += "<a target='_blank' href='" + readMoreLink + "'>Read More</a>"
+        html += "<a id='read_more_link' target='_blank' href='" + readMoreLink + "'>Read More</a>"
         html += "</div>";
     }
 

@@ -1,6 +1,7 @@
 #countdown_gadget {
 	width: 95%;
 	min-height: 150px;
+	position: relative;
 }
 
 #body {
@@ -15,6 +16,9 @@
 #footer {
 	float: right;
 	margin-right: 10px;
+	position: absolute;
+	top: -10px;
+	right: -20px;
 }
 
 #countdown {
@@ -25,4 +29,8 @@
 #read_more {
 	width: 80px;
 	margin: 0 auto;
+}
+
+#read_more_link {
+	font-family: Arial;
 }
