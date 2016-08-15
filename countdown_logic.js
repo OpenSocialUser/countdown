@@ -57,7 +57,12 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
     var htmlHeader = "";
     var htmlFooter = "";
 
-    html += "<div id='countdown'></div>";
+    if (!showAllDigits && $("#countdown_gadget").width() > 0.3 * $(window).width()) {
+        html += "<div id='countdown' style='width: 25%;'></div>";
+    } else {
+        html += "<div id='countdown' style='width: 90%;'></div>";
+    }
+    
 
     if (readMoreLink != null && readMoreLink != "") {
         html += "<div id='read_more'>";
@@ -121,11 +126,6 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
         var timeCirclesDiv = $(".time_circles").first();
 
         timeCirclesDiv.css("height", canvas[0].height + "px");
-    }
-
-    if (!showAllDigits && $("#countdown_gadget").width() > 0.3 * $(window).width()) {
-        $("#countdown").css("width", "25%");
-        $("#countdown").TimeCircles().rebuild();
     }
 }
 
