@@ -122,6 +122,10 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
 
         timeCirclesDiv.css("height", canvas[0].height + "px");
     }
+
+    if (!showAllDigits && $("#countdown_gadget").width() > 0.3 * $(window).width()) {
+        $("#countdown").css("width", "25%");
+    }
 }
 
 function checkIfOwner() {
