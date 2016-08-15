@@ -57,6 +57,14 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
     var htmlHeader = "";
     var htmlFooter = "";
 
+    var showAllDigits = true;
+
+    if (digits != null && digits == "days") {
+        showAllDigits = false;
+    } else {
+        showAllDigits = true;
+    }
+
     if (showAllDigits) {
         html += "<div id='countdown' style='width: 90%;'></div>";
     } else {
@@ -83,14 +91,6 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
     document.getElementById('header').innerHTML = htmlHeader;
 
     $("#countdown").data("date", targetTime);
-
-    var showAllDigits = true;
-
-    if (digits != null && digits == "days") {
-        showAllDigits = false;
-    } else {
-        showAllDigits = true;
-    }
 
     $("#countdown").TimeCircles({
         "count_past_zero": false,
