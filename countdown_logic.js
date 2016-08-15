@@ -57,10 +57,14 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
     var htmlHeader = "";
     var htmlFooter = "";
 
-    if (!showAllDigits && $("#countdown_gadget").width() > 0.3 * $(window).width()) {
-        html += "<div id='countdown' style='width: 25%;'></div>";
-    } else {
+    if (showAllDigits) {
         html += "<div id='countdown' style='width: 90%;'></div>";
+    } else {
+        if ($("#countdown_gadget").width() > 0.3 * $(window).width()) {
+            html += "<div id='countdown' style='width: 25%;'></div>";
+        } else {
+            html += "<div id='countdown' style='width: 90%;'></div>";
+        }
     }
     
 
