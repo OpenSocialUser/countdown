@@ -125,6 +125,7 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
 
     if (!showAllDigits && $("#countdown_gadget").width() > 0.3 * $(window).width()) {
         $("#countdown").css("width", "25%");
+        $("#countdown").TimeCircles().rebuild();
     }
 }
 
