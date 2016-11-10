@@ -1,8 +1,8 @@
 var isOwner = false;
 var selectedDate = "";
 
-function toJSON(obj) { 
-	return gadgets.json.stringify(obj); 
+function toJSON(obj) {
+	return gadgets.json.stringify(obj);
 }
 
 function toObject(str) {
@@ -52,7 +52,7 @@ function updateCountdown() {
     }
 }
 
-function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMoreLink) {    
+function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMoreLink) {
     var html = "";
     var htmlHeader = "";
     var htmlFooter = "";
@@ -74,7 +74,7 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
             html += "<div id='countdown' style='width: 90%;'></div>";
         }
     }
-    
+
 
     if (readMoreLink != null && readMoreLink != "") {
         html += "<div id='read_more'>";
@@ -276,6 +276,33 @@ function renderCountdown() {
                 }
             }, 2000);
         }
+    }
+
+    var frame = null;
+    var frames = document.getElementsByTagName("iframe");
+    for (i = 0; i < frames.length; i++) {
+        if (frames[i].title == 'Countdown') {
+            frame = frames[i];
+        }
+    }
+
+    if (frame != null) {
+        var height = '0';
+        var is_readmore_shown = readMoreLink != null && readMoreLink != "";
+        if (digits == 'all') {
+            if (is_readmore_shown) {
+                height = '125';
+            } else {
+                height = '105';
+            }
+        } else {
+            if (is_readmore_shown) {
+                height = '289';
+            } else {
+                height = '255';
+            }
+        }cd
+        frame.height = height;
     }
 
     /*gadgets.window.adjustHeight();
