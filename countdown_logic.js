@@ -77,7 +77,11 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
 
 
     if (readMoreLink != null && readMoreLink != "") {
-        html += "<div id='read_more'>";
+        if (showAllDigits) {
+            html += "<div id='read_more'>";
+        } else {
+            html += "<div id='read_more' style='position: relative; bottom: 20px;'>";
+        }
         html += "<a id='read_more_link' target='_blank' href='" + readMoreLink + "'>Read More</a>"
         html += "</div>";
     }
@@ -276,33 +280,6 @@ function renderCountdown() {
                 }
             }, 2000);
         }
-    }
-
-    var frame = null;
-    var frames = document.getElementsByTagName("iframe");
-    for (i = 0; i < frames.length; i++) {
-        if (frames[i].title == 'Countdown') {
-            frame = frames[i];
-        }
-    }
-
-    if (frame != null) {
-        var height = '0';
-        var is_readmore_shown = readMoreLink != null && readMoreLink != "";
-        if (digits == 'all') {
-            if (is_readmore_shown) {
-                height = '125';
-            } else {
-                height = '105';
-            }
-        } else {
-            if (is_readmore_shown) {
-                height = '289';
-            } else {
-                height = '255';
-            }
-        }cd
-        frame.height = height;
     }
 
     /*gadgets.window.adjustHeight();

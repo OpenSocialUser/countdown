@@ -5,8 +5,8 @@
 }
 
 #body {
+	height: 230px;
 	margin-top: 20px;
-	margin-bottom: 20px;
 }
 
 #header {
@@ -28,10 +28,12 @@
 #read_more {
 	width: 80px;
 	margin: 0 auto;
+	left: 7px;
 }
 
 #read_more_link {
 	font-family: Arial;
+	font-size: 14px;
 }
 
 #saveButton {
