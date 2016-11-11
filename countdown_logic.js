@@ -68,10 +68,19 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
     if (showAllDigits) {
         html += "<div id='countdown' style='width: 90%;'></div>";
     } else {
-        if ($("#countdown_gadget").width() > 500) {
-            html += "<div id='countdown' style='width: 25%;'></div>";
-        } else {
+        var gadgetWidth = $("#countdown_gadget").width()
+        if (gadgetWidth < 270) {
             html += "<div id='countdown' style='width: 90%;'></div>";
+        } else if (gadgetWidth < 320) {
+            html += "<div id='countdown' style='width: 72%;'></div>";
+        } else if (gadgetWidth < 380) {
+            html += "<div id='countdown' style='width: 58%;'></div>";
+        } else if (gadgetWidth < 450) {
+            html += "<div id='countdown' style='width: 49%;'></div>";
+        } else if (gadgetWidth < 520) {
+            html += "<div id='countdown' style='width: 43%;'></div>";
+        } else {
+            html += "<div id='countdown' style='width: 28%;'></div>";
         }
     }
 
