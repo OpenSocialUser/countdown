@@ -72,7 +72,7 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
         if (gadgetWidth < 300) {
             html += "<div id='countdown' style='width: 90%;'></div>";
         } else if (gadgetWidth < 350) {
-            html += "<div id='countdown' style='width: 71%;'></div>";
+            html += "<div id='countdown' style='width: 70%;'></div>";
         } else if (gadgetWidth < 410) {
             html += "<div id='countdown' style='width: 58%;'></div>";
         } else if (gadgetWidth < 500) {
