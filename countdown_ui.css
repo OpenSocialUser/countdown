@@ -28,12 +28,12 @@
 #read_more {
 	width: 80px;
 	margin: 0 auto;
-	left: 7px;
+	left: 10px;
 }
 
 #read_more_link {
 	font-family: Arial;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 #saveButton {
