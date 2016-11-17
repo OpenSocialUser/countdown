@@ -291,6 +291,8 @@ function renderCountdown() {
         }
     }
 
+    window.onload = gadgets.window.adjustHeight();
+
     /*gadgets.window.adjustHeight();
     setTimeout(function(){
         gadgets.window.adjustHeight();

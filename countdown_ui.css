@@ -1,11 +1,11 @@
 #countdown_gadget {
 	width: 95%;
-	min-height: 150px;
+	/*min-height: 150px;*/
 	position: relative;
 }
 
 #body {
-	height: 230px;
+	/*height: 230px;*/
 	margin-top: 20px;
 }
 
