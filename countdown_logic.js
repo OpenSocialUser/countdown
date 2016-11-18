@@ -261,6 +261,8 @@ function renderEditPage() {
 
     var colorPicker = new jscolor.color(document.getElementById('picker'), {});
     colorPicker.fromString($("#picker").val());
+
+    window.onload = gadgets.window.adjustHeight(300);
 }
 
 function renderCountdown() {
