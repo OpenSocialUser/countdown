@@ -333,7 +333,7 @@ function init() {
     if (wave && wave.isInWaveContainer()) {
         wave.setStateCallback(renderCountdown);
 
-        wave.setParticipantCallback(renderCountdown);
+        // wave.setParticipantCallback(renderCountdown);
     }
 }
 
