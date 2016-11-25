@@ -34,7 +34,7 @@ function updateCountdown() {
     var targetTime = "";
     var displayCircles = true;
 
-    var readMoreLink = $("#read_more_link").val();
+    var readMoreLink = $("#read_more_field").val();
 
     var digitsRadio = $("input[type='radio'][name='digits']:checked");
     if (digitsRadio.length > 0) {
@@ -244,7 +244,7 @@ function renderEditPage() {
     html += "<p style='font-size: 14px;'>Enter URL for 'Read More' link (if left empty the link won't be shown):</p>";
 
     if (readMoreLink != null && readMoreLink != "") {
-        html += "<input id='read_more_filed' type='text' value='" + readMoreLink + "'/>";
+        html += "<input id='read_more_field' type='text' value='" + readMoreLink + "'/>";
         selectedDate = targetTime;
     } else {
         html += "<input id='read_more_field' type='text'/>";
