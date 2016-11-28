@@ -275,6 +275,12 @@ function renderEditPage() {
         minDate: '-1970/01/01',
         onChangeDateTime:function(dp, $input){
             selectedDate = $input.val();
+        },
+        onChangeMonth:function(ct, $input){
+          updateDateTimeToSelected($input);
+        },
+        onChangeYear:function(ct, $input){
+          updateDateTimeToSelected($input);
         }
     });
 
@@ -326,7 +332,18 @@ function currentDate() {
   var day = date.getDate();
   var month = date.getMonth() + 1;
   var year = date.getFullYear()
+  return formatDate(year, month, day, hour);
+}
+
+function formatDate(year, month, day, hour) {
   return year+'/'+month+'/'+day+' '+hour+':00'
+}
+
+function updateDateTimeToSelected(input) {
+  var d = $('td.xdsoft_date.xdsoft_current').data();
+  var t = $('div.xdsoft_time.xdsoft_current').data();
+  input.val(formatDate(d.year, d.month, d.date, t.hour));
+  selectedDate = input.val();
 }
 
 function init() {
