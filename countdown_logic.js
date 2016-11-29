@@ -266,8 +266,8 @@ function renderEditPage() {
     inline:true,
     minDate: '-1970/01/01',
     onChangeDateTime:function(dp, $input){ selectedDate = $input.val(); },
-    onChangeMonth:function(ct, $input){ updateDateTimeToSelected(ct); },
-    onChangeYear:function(ct, $input){ updateDateTimeToSelected(ct); }
+    onChangeMonth:function(ct, $input){ updateDateTimeToSelected(ct,$input); },
+    onChangeYear:function(ct, $input){ updateDateTimeToSelected(ct,$input); }
   });
 
   var colorPicker = new jscolor.color(document.getElementById('picker'), {});
@@ -316,7 +316,7 @@ function formatDate(y, m, d, h) {
   return y+'/'+m+'/'+d+' '+h+':00'
 }
 
-function updateDateTimeToSelected(ct) {
+function updateDateTimeToSelected(ct, input) {
   selectedDate = formatDate(ct.getFullYear(),ct.getMonth()+1,ct.getDate(),ct.getHours());
   input.val(selectedDate);
 }
