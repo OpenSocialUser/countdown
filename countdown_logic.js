@@ -237,7 +237,6 @@ function renderEditPage() {
 
   if (readMoreLink != null && readMoreLink != "") {
     html += "<input id='read_more_field' type='text' value='" + readMoreLink + "'/>";
-    selectedDate = targetTime;
   } else {
     html += "<input id='read_more_field' type='text'/>";
   }
@@ -273,16 +272,19 @@ function renderEditPage() {
   var colorPicker = new jscolor.color(document.getElementById('picker'), {});
   colorPicker.fromString($("#picker").val());
 
+  $('.xdsoft_today_button').click(function() {
+    selectedDate = currentDate();
+  });
+
   window.onload = gadgets.window.adjustHeight(300);
 }
 
 function renderCountdown() {
-  if (!wave.getState()) {
-    return;
-  }
-  var state = wave.getState();
+  if (!wave.getState()) return;
 
+  var state = wave.getState();
   var targetTime = state.get('target_time');
+
   var digits = state.get('digits');
   var circlesColor = state.get('circles_color');
   var displayCircles = state.get('display_circles');
