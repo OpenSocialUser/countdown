@@ -134,24 +134,25 @@ function saveCountdown() {
     isOnSave = true;
     handleSaveButton();
 
-    state.submitDelta({
+    var stateToSubmit = wave.getState();
+    stateToSubmit.submitDelta({
       'digits': digits,
       'target_time': targetTime,
       'display_circles': displayCircles,
       'circles_color': circlesColor,
-      'read_more_link' : readMoreLink
+      'read_more_link': readMoreLink
     });
   } else {
     renderEditPage();
   }
 }
 
-function isCountdownSown() {
-  return $('#countdown_gadget').length > 0;
+function isCountdownShown() {
+  return $('#countdown').length > 0;
 }
 
 function insertCountdown() {
-  if (isCountdownSown()) {
+  if (isCountdownShown()) {
       renderEditButton();
       return;
   }
