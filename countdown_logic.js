@@ -343,6 +343,20 @@ function renderEditPage() {
   window.onload = gadgets.window.adjustHeight(300);
 }
 
+function renderDummy() {
+    if (document.getElementById('dummy_txt') != null) return;
+
+    var html = "";
+    var htmlHeader = "";
+    var htmlFooter = "";
+
+    html += "<p id='dummy_txt' style='color:red;'>Gadget has not yet been initialized with proper RSS Feed. Please contact group admin.</p>";
+
+    document.getElementById('body').innerHTML = html;
+    document.getElementById('footer').innerHTML = htmlFooter;
+    document.getElementById('header').innerHTML = htmlHeader;
+}
+
 function renderCountdown() {
   if (!wave.getState()) return;
   checkIfOwner();
@@ -356,6 +370,8 @@ function renderCountdown() {
   } else {
     if (isOwner) {
       renderEditPage();
+    } else {
+      renderDummy();
     }
   }
 }
