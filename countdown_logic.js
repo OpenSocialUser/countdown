@@ -220,12 +220,12 @@ function insertCountdown() {
       },
       "Minutes": {
         "text": "Minutes",
-        "color": "#" + circlesColor,
+        "color": "#" + state.circlesColor,
         "show": showAllDigits
       },
       "Seconds": {
         "text": "Seconds",
-        "color": "#" + circlesColor,
+        "color": "#" + state.circlesColor,
         "show": showAllDigits
       }
     }
