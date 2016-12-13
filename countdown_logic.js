@@ -16,8 +16,9 @@ var jscolor={dir:"",bindClass:"color",binding:!0,preloading:!0,install:function(
 
 
 // countdown_logic.js
-var isOwner = false;
+var isOwner = null;
 var selectedDate = "";
+var isOnSave = false;
 
 function toJSON(obj) {
 	return gadgets.json.stringify(obj);
@@ -27,8 +28,80 @@ function toObject(str) {
     return gadgets.json.parse(str);
 }
 
-function updateCountdown() {
-	var state = wave.getState();
+function currentDate() {
+  var d = new Date;
+  return formatDate(d.getFullYear(),d.getMonth()+1,d.getDate(),d.getHours()+1);
+}
+
+function formatDate(y, m, d, h) {
+  return y+'/'+m+'/'+d+' '+h+':00'
+}
+
+function updateDateTimeToSelected(ct, input) {
+  selectedDate = formatDate(ct.getFullYear(),ct.getMonth()+1,ct.getDate(),ct.getHours());
+  input.val(selectedDate);
+}
+
+function checkIfOwner() {
+  if (isOwner != null) return;
+
+  var userId = null;
+  var ownerId = null;
+  osapi.people.getOwner().execute(function(data) {
+    ownerId = data.id;
+    osapi.people.getViewer().execute(function(data) {
+      userId = data.id;
+      if (ownerId != null && userId != null) {
+        isOwner = (ownerId == userId);
+      }
+    });
+  });
+}
+
+function getState() {
+  var state = wave.getState();
+
+  return {
+    targetTime: state.get('target_time'),
+    digits: state.get('digits'),
+    displayCircles: state.get('display_circles'),
+    circlesColor: state.get('circles_color'),
+    readMoreLink: state.get('read_more_link')
+  };
+}
+
+function renderEditButton() {
+  if (!isOwner || document.getElementById('editButtonIcon') != null) return;
+
+  var footer = document.getElementById('footer');
+  var button = document.createElement('div');
+  button.setAttribute('id', 'editButtonIcon');
+  button.setAttribute('onclick', 'renderEditPage()');
+  footer.appendChild(button);
+}
+
+function handleSaveButton(saving) {
+  if (saving == null) saving = true;
+
+  var btn = document.getElementById('saveButton');
+  if (btn == null) return;
+
+  if (saving) {
+    btn.textContent = 'Saving...'
+    btn.disabled = true;
+  } else {
+    btn.textContent = 'Save'
+    btn.disabled = false;
+  }
+}
+
+function cancelEdit() {
+  var state = getState();
+  if (state.targetTime != null && state.digits != "") insertCountdown();
+}
+
+function saveCountdown() {
+  var state = getState();
 
   var digits = "";
   var targetTime = "";
@@ -58,30 +131,39 @@ function updateCountdown() {
   }
 
   if (targetTime != null && targetTime != "") {
-    state.submitDelta({'digits' : digits});
-    state.submitDelta({'target_time' : targetTime});
-    state.submitDelta({'display_circles' : displayCircles});
-    state.submitDelta({'circles_color' : circlesColor});
-    state.submitDelta({'read_more_link' : readMoreLink});
+    isOnSave = true;
+    handleSaveButton();
 
-    drawCountdown(digits, targetTime, displayCircles, circlesColor, readMoreLink);
+    state.submitDelta({
+      'digits': digits,
+      'target_time': targetTime,
+      'display_circles': displayCircles,
+      'circles_color': circlesColor,
+      'read_more_link' : readMoreLink
+    });
   } else {
     renderEditPage();
   }
 }
 
-function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMoreLink) {
+function isCountdownSown() {
+  return $('#countdown_gadget').length > 0;
+}
+
+function insertCountdown() {
+  if (isCountdownSown()) {
+      renderEditButton();
+      return;
+  }
+
+  var state = getState();
+
   var html = "";
   var htmlHeader = "";
   var htmlFooter = "";
 
   var showAllDigits = true;
-
-  if (digits != null && digits == "days") {
-    showAllDigits = false;
-  } else {
-    showAllDigits = true;
-  }
+  if (state.digits != null && state.digits == "days") showAllDigits = false;
 
   if (showAllDigits) {
     html += "<div id='countdown' style='width: 90%;'></div>";
@@ -102,26 +184,21 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
     }
   }
 
-
-  if (readMoreLink != null && readMoreLink != "") {
+  if (state.readMoreLink != null && state.readMoreLink != "") {
     if (showAllDigits) {
       html += "<div id='read_more'>";
     } else {
       html += "<div id='read_more' style='position: relative; bottom: 20px;'>";
     }
-    html += "<a id='read_more_link' target='_blank' href='" + readMoreLink + "'>Read More</a>"
+    html += "<a id='read_more_link' target='_blank' href='" + state.readMoreLink + "'>Read More</a>"
     html += "</div>";
-  }
-
-  if (isOwner) {
-    htmlFooter += "<div id='editButtonIcon' onclick='renderEditPage()''></div>";
   }
 
   document.getElementById('body').innerHTML = html;
   document.getElementById('footer').innerHTML = htmlFooter;
   document.getElementById('header').innerHTML = htmlHeader;
 
-  $("#countdown").data("date", targetTime);
+  $("#countdown").data("date", state.targetTime);
 
   $("#countdown").TimeCircles({
     "count_past_zero": false,
@@ -132,12 +209,12 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
     "time": {
       "Days": {
         "text": "Days",
-        "color": "#" + circlesColor,
+        "color": "#" + state.circlesColor,
         "show": true
       },
       "Hours": {
         "text": "Hours",
-        "color": "#" + circlesColor,
+        "color": "#" + state.circlesColor,
         "show": showAllDigits
       },
       "Minutes": {
@@ -153,47 +230,33 @@ function drawCountdown(digits, targetTime, displayCircles, circlesColor, readMor
     }
   });
 
-  if (displayCircles != null && !displayCircles) {
+  if (state.displayCircles != null && !state.displayCircles) {
     var canvas = $("#circlesCanvas");
     canvas.hide();
     var timeCirclesDiv = $(".time_circles").first();
     timeCirclesDiv.css("height", canvas[0].height + "px");
   }
+
+  renderEditButton();
+  window.onload = gadgets.window.adjustHeight();
 }
 
-function checkIfOwner() {
-  var userId = null;
-  var ownerId = null;
-
-  osapi.people.getViewer().execute(function(data) {
-    userId = data.id;
-    osapi.people.getOwner().execute(function(data) {
-      ownerId = data.id;
-      if (ownerId != null && userId != null && ownerId == userId) {
-          isOwner = true;
-      } else {
-          isOwner = false;
-      }
-    });
-  });
+function isEditPageShown() {
+  return (document.getElementById('saveButton') != null);
 }
 
 function renderEditPage() {
-	var state = wave.getState();
+  if (isEditPageShown()) return;
 
-  var targetTime = state.get('target_time');
-  var digits = state.get('digits');
-  var displayCircles = state.get('display_circles');
-  var circlesColor = state.get('circles_color');
-  var readMoreLink = state.get('read_more_link');
+  var state = getState();
 
-	var html = "";
-	var htmlHeader = "";
-	var htmlFooter = "";
+  var html = "";
+  var htmlHeader = "";
+  var htmlFooter = "";
 
-  html += "<p style='font-size: 14px;'>Choose digits to display:</p>";
+  html += "<p class='label'>Choose digits to display:</p>";
 
-  if (digits != null && digits == "days") {
+  if (state.digits != null && state.digits == "days") {
     html += "<input type='radio' name='digits' value='all'>Days with hour/min/sec</input>";
     html += "</br>";
     html += "<input type='radio' name='digits' value='days' checked='true'>Days only</input>";
@@ -204,39 +267,38 @@ function renderEditPage() {
   }
 
   html += "</br>";
-  html += "<p style='font-size: 14px;'>Countdown style:</p>";
+  html += "<p class='label'>Countdown style:</p>";
 
-  if (displayCircles != null && displayCircles == false) {
+  if (state.displayCircles != null && state.displayCircles == false) {
     html += "<input type='checkbox' name='circles' value='true'>Display circles</input>";
   } else {
     html += "<input type='checkbox' name='circles' value='true' checked='true'>Display circles</input>";
   }
 
   html += "</br>";
-  html += "<p style='font-size: 14px;'>Pick circle color:</p>";
+  html += "<p class='label'>Pick circle color:</p>";
 
-  if (circlesColor != null && circlesColor != "") {
-    html += "<input id='picker' class='color' value='" + circlesColor + "'/>";
+  if (state.circlesColor != null && state.circlesColor != "") {
+    html += "<input id='picker' class='color' value='" + state.circlesColor + "'/>";
   } else {
     html += "<input id='picker' class='color' value='40484F'/>";
   }
 
   html += "</br>";
-  html += "<p style='font-size: 14px;'>Enter date for the Final Countdown:</p>";
+  html += "<p class='label'>Enter date for the Final Countdown:</p>";
 
-  if (targetTime != null && targetTime != "") {
-    html += "<input id='target_date_picker' type='text' value='" + targetTime + "'/>";
-    selectedDate = targetTime;
+  if (state.targetTime != null && state.targetTime != "") {
+    selectedDate = state.targetTime;
   } else {
     selectedDate = currentDate();
-    html += "<input id='target_date_picker' type='text' value='" + selectedDate + "'/>";
   }
+  html += "<input id='target_date_picker' type='text' value='" + selectedDate + "'/>";
 
   html += "</br>";
-  html += "<p style='font-size: 14px;'>Enter URL for 'Read More' link (if left empty the link won't be shown):</p>";
+  html += "<p class='label'>Enter URL for 'Read More' link (if left empty the link won't be shown):</p>";
 
-  if (readMoreLink != null && readMoreLink != "") {
-    html += "<input id='read_more_field' type='text' value='" + readMoreLink + "'/>";
+  if (state.readMoreLink != null && state.readMoreLink != "") {
+    html += "<input id='read_more_field' type='text' value='" + state.readMoreLink + "'/>";
   } else {
     html += "<input id='read_more_field' type='text'/>";
   }
@@ -244,8 +306,8 @@ function renderEditPage() {
   html += "</br>";
   html += "</br>";
 
-  html += "<button id='saveButton' onclick='updateCountdown()''>Save</button>";
-  html += "<button id='cancelButton' onclick='renderCountdown()''>Cancel</button>";
+  html += "<button id='saveButton' onclick='saveCountdown()'>Save</button>";
+  html += "<button id='cancelButton' onclick='cancelEdit()'>Cancel</button>";
 
   html += "<p>";
   html += "Please report issues to IT direct component ";
@@ -256,6 +318,7 @@ function renderEditPage() {
   html += "</p>";
 
   htmlHeader += "<h3>Settings:</h3>";
+  htmlFooter += "<div class='help-container'><a class='help-link' href='https://jam4.sapjam.com/wiki/show/2ZrYD1OhdVispcr5bSzf1T' target='_blank' title='Help'>?</a></div>";
 
   document.getElementById('body').innerHTML = html;
   document.getElementById('footer').innerHTML = htmlFooter;
@@ -281,46 +344,19 @@ function renderEditPage() {
 
 function renderCountdown() {
   if (!wave.getState()) return;
-
-  var state = wave.getState();
-  var targetTime = state.get('target_time');
-
-  var digits = state.get('digits');
-  var circlesColor = state.get('circles_color');
-  var displayCircles = state.get('display_circles');
-  var readMoreLink = state.get('read_more_link');
-
   checkIfOwner();
+  if (!isOnSave && isEditPageShown()) return;
 
-  if (targetTime != null && digits != null) {
-  	drawCountdown(digits, targetTime, displayCircles, circlesColor, readMoreLink);
+  isOnSave = false;
+
+  var state = getState();
+  if (state.targetTime != null && state.digits != "") {
+    insertCountdown();
   } else {
     if (isOwner) {
-     renderEditPage();
-    } else {
-      setTimeout(function(){
-        if (isOwner) {
-          renderEditPage();
-        }
-      }, 2000);
+      renderEditPage();
     }
   }
-
-  window.onload = gadgets.window.adjustHeight();
-}
-
-function currentDate() {
-  var d = new Date;
-  return formatDate(d.getFullYear(),d.getMonth()+1,d.getDate(),d.getHours()+1);
-}
-
-function formatDate(y, m, d, h) {
-  return y+'/'+m+'/'+d+' '+h+':00'
-}
-
-function updateDateTimeToSelected(ct, input) {
-  selectedDate = formatDate(ct.getFullYear(),ct.getMonth()+1,ct.getDate(),ct.getHours());
-  input.val(selectedDate);
 }
 
 function init() {
