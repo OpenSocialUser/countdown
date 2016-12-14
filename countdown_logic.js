@@ -195,6 +195,8 @@ function insertCountdown() {
     html += "</div>";
   }
 
+  htmlHeader += "<div style='height: 20px'></div>"
+
   document.getElementById('body').innerHTML = html;
   document.getElementById('footer').innerHTML = htmlFooter;
   document.getElementById('header').innerHTML = htmlHeader;
