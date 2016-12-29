@@ -80,6 +80,15 @@ function renderEditButton() {
   footer.appendChild(button);
 }
 
+function handleUiErrors(message, clean) {
+    if (clean == null) clean = true;
+
+    var span = document.getElementById('general_error');
+    if (clean) {
+        span.textContent = '';
+    } else span.textContent = message;
+}
+
 function handleSaveButton(saving) {
   if (saving == null) saving = true;
 
@@ -101,6 +110,8 @@ function cancelEdit() {
 }
 
 function saveCountdown() {
+  handleUiErrors();
+
   var state = getState();
 
   var digits = "";
@@ -112,18 +123,12 @@ function saveCountdown() {
   var digitsRadio = $("input[type='radio'][name='digits']:checked");
   if (digitsRadio.length > 0) {
     digits = digitsRadio.val();
-  } else {
-    digits = "all";
-  }
+  } else digits = "all";
 
   targetTime = selectedDate;
 
   var circlesCheckbox = $("input[type='checkbox'][name='circles']:checked");
-  if (circlesCheckbox.length > 0) {
-    displayCircles = true;
-  } else {
-    displayCircles = false;
-  }
+  displayCircles = (circlesCheckbox.length > 0);
 
   circlesColor = $("#picker").val();
   if (circlesColor == null || circlesColor == undefined || circlesColor == "") {
@@ -131,19 +136,28 @@ function saveCountdown() {
   }
 
   if (targetTime != null && targetTime != "") {
-    isOnSave = true;
     handleSaveButton();
 
-    var stateToSubmit = wave.getState();
-    stateToSubmit.submitDelta({
-      'digits': digits,
-      'target_time': targetTime,
-      'display_circles': displayCircles,
-      'circles_color': circlesColor,
-      'read_more_link': readMoreLink
+    osapi.people.getOwner().execute(function(data) {
+      if (data.id == null) {
+        handleSaveButton(false);
+        handleUiErrors('Changes cannot be saved. Please reload the page and try again.', false);
+      } else {
+        isOnSave = true;
+
+        var stateToSubmit = wave.getState();
+        stateToSubmit.submitDelta({
+          'digits': digits,
+          'target_time': targetTime,
+          'display_circles': displayCircles,
+          'circles_color': circlesColor,
+          'read_more_link': readMoreLink
+        });
+      }
     });
   } else {
-    renderEditPage();
+    handleSaveButton(false);
+    handleUiErrors('Please select the date for the Final Countdown first.', false);
   }
 }
 
@@ -261,15 +275,15 @@ function renderEditPage() {
 
   if (state.digits != null && state.digits == "days") {
     html += "<input type='radio' name='digits' value='all'>Days with hour/min/sec</input>";
-    html += "</br>";
+    html += "<br>";
     html += "<input type='radio' name='digits' value='days' checked='true'>Days only</input>";
   } else {
     html += "<input type='radio' name='digits' value='all' checked='true'>Days with hour/min/sec</input>";
-    html += "</br>";
+    html += "<br>";
     html += "<input type='radio' name='digits' value='days'>Days only</input>";
   }
 
-  html += "</br>";
+  html += "<br>";
   html += "<p class='label'>Countdown style:</p>";
 
   if (state.displayCircles != null && state.displayCircles == false) {
@@ -278,7 +292,7 @@ function renderEditPage() {
     html += "<input type='checkbox' name='circles' value='true' checked='true'>Display circles</input>";
   }
 
-  html += "</br>";
+  html += "<br>";
   html += "<p class='label'>Pick circle color:</p>";
 
   if (state.circlesColor != null && state.circlesColor != "") {
@@ -287,7 +301,7 @@ function renderEditPage() {
     html += "<input id='picker' class='color' value='40484F'/>";
   }
 
-  html += "</br>";
+  html += "<br>";
   html += "<p class='label'>Enter date for the Final Countdown:</p>";
 
   if (state.targetTime != null && state.targetTime != "") {
@@ -297,7 +311,7 @@ function renderEditPage() {
   }
   html += "<input id='target_date_picker' type='text' value='" + selectedDate + "'/>";
 
-  html += "</br>";
+  html += "<br>";
   html += "<p class='label'>Enter URL for 'Read More' link (if left empty the link won't be shown):</p>";
 
   if (state.readMoreLink != null && state.readMoreLink != "") {
@@ -306,8 +320,8 @@ function renderEditPage() {
     html += "<input id='read_more_field' type='text'/>";
   }
 
-  html += "</br>";
-  html += "</br>";
+  html += "<br>";
+  html += "<span id='general_error' class='error-txt'></span>"
 
   html += "<button id='saveButton' onclick='saveCountdown()'>Save</button>";
   html += "<button id='cancelButton' onclick='cancelEdit()'>Cancel</button>";
