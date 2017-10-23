@@ -46,7 +46,7 @@ function isEditPageShown() {
 }
 
 function isJamGroupOverviewPage() {
-  document.referrer.indexOf("/overview_page/") > -1
+  return document.referrer.indexOf("/overview_page/") > -1
 }
 
 function renderEditButton() {
