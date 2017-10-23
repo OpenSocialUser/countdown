@@ -70,8 +70,15 @@ function getState() {
   };
 }
 
+function isJamEditPage() {
+  var isNotPreviewPage = document.referrer.indexOf("overview_page") == -1
+  var isEditPage = document.referrer.match(/layout_pages\/\w+\/edit$/) != null
+  return isNotPreviewPage && isEditPage
+}
+
 function renderEditButton() {
   if (!isOwner || document.getElementById('editButtonIcon') != null) return;
+  if (!isJamEditPage()) return;
 
   var footer = document.getElementById('footer');
   var button = document.createElement('div');
