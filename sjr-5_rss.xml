@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title style="background-image: url(javascript:alert('Injected'))">Test<script>alert('Injected!');</script></title>
+  <script>alert('Injected!');</script>
+    <link style="background-image: url(javascript:alert('Injected'))">http://example.com</link>
+    <description style="background-image: url(javascript:alert('Injected'))">Test<script>alert('Injected!');</script></description>
+    <language>en-gb</language>
+    <lastBuildDate>Wed, 28 Oct 2015 19:56:11 GMT<script>alert('Injected!');</script></lastBuildDate>
+    <copyright>None<script>alert('Injected!');</script></copyright>
+    <image style="background-image: url(javascript:alert('Injected'))">
+    <script>alert('Injected!');</script>
+      <url style="background-image: url(javascript:alert('Injected'))">http://example.com<script>alert('Injected!');</script></url>
+      <title style="background-image: url(javascript:alert('Injected'))">Test<script>alert('Injected!');</script></title>
+      <link style="background-image: url(javascript:alert('Injected'))">http://example.com</link>
+      <width>120<script>alert('Injected!');</script></width>
+      <height>60<script>alert('Injected!');</script></height>
+    </image>
+    <ttl>15<script>alert('Injected!');</script></ttl>
+    <atom:link href="http://example.com" rel="self" type="application/rss+xml"/>
+    <item>
+    <script>alert('Injected!');</script>
+      <title style="background-image: url(javascript:alert('Injected'))"><![CDATA[<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onload="window.alert('HELLO WORLD')">]]></title>
+      <description style="background-image: url(javascript:alert('Injected'))">Injection<script>alert('Injected!');</script></description>
+      <link style="background-image: url(javascript:alert('Injected'))">http://example.com<script>alert('Injected!');</script></link>
+      <guid isPermaLink="false">http://example.com<script>alert('Injected!');</script></guid>
+      <pubDate style="background-image: url(javascript:alert('Injected'))">Wed, 28 Oct 2015 18:37:08 GMT<script>alert('Injected!');</script></pubDate>
+    </item>
+  </channel>
+</rss>
